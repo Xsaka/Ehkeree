@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Чат</h1>
+    <div id="chat"></div>
+    <textarea id="message"></textarea>
+    <button onclick="sendMessage()">Отправить</button>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById('message').value;
+            document.getElementById('message').value = '';
+            
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages: [{ role: 'user', content: message }]
+                })
+            });
+            
+            const data = await response.json();
+            document.getElementById('chat').innerHTML += `<p>${data}</p>`;
+        }
+    </script>
+</body>
+</html>
+
